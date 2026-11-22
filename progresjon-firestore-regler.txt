@@ -1,0 +1,38 @@
+// LEGG DISSE MATCH-BLOKKENE INN I DET EKSISTERENDE
+// service cloud.firestore { match /databases/{database}/documents { ... } }
+// Erstatt TRENER_UID med UID for den dedikerte e-post/passord-brukeren.
+// Ikke erstatt hele Coachtool-regelsettet med denne filen.
+
+function isInnetreningTrainer() {
+  return request.auth != null
+    && request.auth.uid == "SETT_INN_TRENER_UID"
+    && request.auth.token.firebase.sign_in_provider == "password";
+}
+
+match /innetrening_players/{playerId} {
+  allow read: if isInnetreningTrainer();
+  allow create: if isInnetreningTrainer()
+    && request.resource.data.keys().hasOnly(['name', 'createdAt'])
+    && request.resource.data.keys().hasAll(['name', 'createdAt'])
+    && request.resource.data.name is string
+    && request.resource.data.name.size() >= 2
+    && request.resource.data.name.size() <= 100
+    && request.resource.data.createdAt == request.time;
+  allow update, delete: if false;
+
+  match /results/{resultId} {
+    allow read, delete: if isInnetreningTrainer();
+    allow create: if isInnetreningTrainer()
+      && request.resource.data.keys().hasOnly(['date', 'sprint10', 'sprint20', 'jump', 'pushups', 'createdAt'])
+      && request.resource.data.keys().hasAll(['date', 'createdAt'])
+      && request.resource.data.keys().hasAny(['sprint10', 'sprint20', 'jump', 'pushups'])
+      && request.resource.data.date is string
+      && request.resource.data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+      && request.resource.data.createdAt == request.time
+      && (!('sprint10' in request.resource.data) || (request.resource.data.sprint10 is number && request.resource.data.sprint10 >= 0.5 && request.resource.data.sprint10 <= 30))
+      && (!('sprint20' in request.resource.data) || (request.resource.data.sprint20 is number && request.resource.data.sprint20 >= 1 && request.resource.data.sprint20 <= 60))
+      && (!('jump' in request.resource.data) || (request.resource.data.jump is number && request.resource.data.jump >= 1 && request.resource.data.jump <= 500))
+      && (!('pushups' in request.resource.data) || (request.resource.data.pushups is int && request.resource.data.pushups >= 0 && request.resource.data.pushups <= 200));
+    allow update: if false;
+  }
+}
