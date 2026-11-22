@@ -5,7 +5,7 @@
 
 function isInnetreningTrainer() {
   return request.auth != null
-    && request.auth.uid == "SETT_INN_TRENER_UID"
+    && request.auth.uid == "Dq6xcbH2vSTqoh5c8rwW22EFQfl1"
     && request.auth.token.firebase.sign_in_provider == "password";
 }
 
