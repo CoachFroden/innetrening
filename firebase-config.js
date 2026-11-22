@@ -1,8 +1,8 @@
-// Firebase Console → Prosjektinnstillinger → Dine apper → Webapp → firebaseConfig
-// Erstatt verdiene under. Firebase web-konfigurasjon er ikke en hemmelig servernøkkel.
 export const firebaseConfig = {
-  apiKey: "SETT_INN_API_KEY",
-  authDomain: "SETT_INN_PROJECT_ID.firebaseapp.com",
-  projectId: "SETT_INN_PROJECT_ID",
-  appId: "SETT_INN_APP_ID"
+  apiKey: "AIzaSyA_R0mqA-vvll2IcFKMfnLWN_4HxugYUfI",
+  authDomain: "coachtool-2027.firebaseapp.com",
+  projectId: "coachtool-2027",
+  storageBucket: "coachtool-2027.firebasestorage.app",
+  messagingSenderId: "374790763432",
+  appId: "1:374790763432:web:446900360ca7966c02639d"
 };
